@@ -6,7 +6,7 @@ const { ObjectId } = require('mongodb');
 const Bull = require('bull');
 
 class UsersController {
-  static async postNew(request, response) {
+  static async postNew (request, response) {
     const userQueue = new Bull('userQueue');
 
     const userEmail = request.body.email;
@@ -22,13 +22,13 @@ class UsersController {
     const result = await DBClient.db.collection('users').insertOne({ email: userEmail, password: shaUserPassword });
 
     userQueue.add({
-      userId: result.insertedId,
+      userId: result.insertedId
     });
 
     return response.status(201).send({ id: result.insertedId, email: userEmail });
   }
 
-  static async getMe(request, response) {
+  static async getMe (request, response) {
     const token = request.header('X-Token') || null;
     if (!token) return response.status(401).send({ error: 'Unauthorized' });
 
