@@ -103,7 +103,7 @@ class FilesController {
     if (!user) return response.status(401).send({ error: 'Unauthorized' });
 
     const idFile = request.params.id || '';
-    // if (!idFile) return response.status(404).send({ error: 'Not found' });
+    //request.params.id
 
     const fileDocument = await DBClient.db.collection('files').findOne({ _id: ObjectId(idFile), userId: user._id });
     if (!fileDocument) return response.status(404).send({ error: 'Not found' });
@@ -129,11 +129,9 @@ class FilesController {
     if (!user) return response.status(401).send({ error: 'Unauthorized' });
 
     const parentId = request.query.parentId || 0;
-    // parentId = parentId === '0' ? 0 : parentId;
 
     const pagination = request.query.page || 0;
-    // pagination = Number.isNaN(pagination) ? 0 : pagination;
-    // pagination = pagination < 0 ? 0 : pagination;
+    // pagination = query page request
 
     const aggregationMatch = { $and: [{ parentId }] };
     let aggregateData = [{ $match: aggregationMatch }, { $skip: pagination * 20 }, { $limit: 20 }];
@@ -252,4 +250,3 @@ class FilesController {
 }
 
 module.exports = FilesController;
-
